@@ -11,6 +11,7 @@ public class PlayerScript : MonoBehaviour {
 	public int PlayerMaxHP;
 	public int PlayerStrength;
 	public int PlayerAgility;
+	public bool ItemCollected;
 
 	void Start () {													
 	//Setting variables
@@ -20,10 +21,10 @@ public class PlayerScript : MonoBehaviour {
 		PlayerMaxHP = 10;											// Player stat relating to maximum HP
 		PlayerStrength = 10;										// Player stat relating to strength
 		PlayerAgility = 10;											// Player stat relating to agility
+		ItemCollected = false;										// Whether the player has collected an item
 	
 	//Running start-up functions
-		ItemCollected();							//Calls the function that sets whether the item is collected or not
-		BoostFromItem ();							//Calls the function that boost stats depending on item pickups
+
 	
 	//Debug text
 		Debug.Log ("Player's level is: " + PlayerLVL);
@@ -33,8 +34,15 @@ public class PlayerScript : MonoBehaviour {
 		Debug.Log ("Player Max HP: " + PlayerMaxHP + " Player Strength: " + PlayerStrength + " Player Agility: " + PlayerAgility);
 	}
 
-	void Update() {
-		
+	void Update() 
+	{
+		if (Input.GetKeyDown (KeyCode.E)) 			//If the E key is pressed then it runs the functions
+		{
+			ItemCollect ();
+			BoostFromItem ();							//Calls the function that boost stats depending on item pickups
+			ItemCollected = false;
+		}
+
 	}
 
 	//Functions relating to experience
@@ -55,30 +63,38 @@ public class PlayerScript : MonoBehaviour {
 
 	////Functions relating to item pickups
 
-	public bool ItemCollected ()							//Randomises whether the player has picked up an item
+	void ItemCollect ()							//Randomises whether the player has picked up an item
 	{
-		bool x = true;
-		return x;
+		ItemCollected = true;
 	}
 
 	void BoostFromItem()								//If an item has been collected, and it is an apple, then boost the appropriate stat.
 	{
-		if (ItemCollected() == true)					//If the item has been picked up
+		if (ItemCollected == true)						//If the item has been picked up
 		{
-			if (ItemPickup() == 1)						//And the pickup is an apple
+			if (ItemPickup () == 1) 					//And the pickup is an apple
+			{						
+				Debug.Log ("You picked up an apple");
+				if (StatOnPickup () == 1) 				//And the stat to boost upon pickup is an the player's HP
+				{				
+					BoostHP ();							//Run the BoostHP function
+				} 
+				else if (StatOnPickup () == 2) 
+				{										//If the stat to boost upon pickup is strength
+					BoostStrength ();					//Run the BoostStrength function
+				} 
+				else 
+				{										//If the stat to boost upon pickup is agility
+					BoostAgility ();					//Run the BoostAgility function
+				}
+			} 
+			else if (ItemPickup() == 2)
 			{
-				if (StatOnPickup() == 1)				//And the stat to boost upon pickup is an the player's HP
-				{
-					BoostHP();							//Run the BoostHP function
-				}
-				else if (StatOnPickup() == 2)			//If the stat to boost upon pickup is strength
-				{
-					BoostStrength();					//Run the BoostStrength function
-				}
-				else									//If the stat to boost upon pickup is agility
-				{
-					BoostAgility();						//Run the BoostAgility function
-				}
+				Debug.Log ("You picked up a donut");
+			}
+			else
+			{
+				Debug.Log ("You picked up a cake");
 			}
 		}
 	}
@@ -108,19 +124,19 @@ public class PlayerScript : MonoBehaviour {
 	void BoostHP ()									//Increases the player's max HP
 	{
 		PlayerMaxHP += 1;
-		Debug.Log ("Your HP has been increased");
+		Debug.Log ("Your HP has been increased to " + PlayerMaxHP);
 	}
 
 	void BoostStrength ()							//Increases the player's strength
 	{
 		PlayerStrength += 1;
-		Debug.Log ("Your Strength has been increased");
+		Debug.Log ("Your Strength has been increased to " + PlayerStrength);
 	}
 
 	void BoostAgility ()							//Increases the player's agility
 	{
 		PlayerAgility += 1;
-		Debug.Log ("Your Agility has been increased");
+		Debug.Log ("Your Agility has been increased" + PlayerAgility);
 	}
 
 }
