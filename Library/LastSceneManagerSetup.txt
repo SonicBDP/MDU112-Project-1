@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/MDU112 Project 1.unity
+  isLoaded: 1
+  isActive: 1
